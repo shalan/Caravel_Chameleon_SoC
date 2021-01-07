@@ -18,7 +18,7 @@
 `timescale 1 ns / 1 ps
 
 `define   TEST_FILE   "../sw/test.hex" 
-`define   SIM_TIME    3000_000
+`define   SIM_TIME    800_000
 `define   SIM_LEVEL   0
 
 `define SOC_SETUP_TIME 800*2001
@@ -35,67 +35,77 @@
     `define NO_HC_CACHE
     `include "DFFRAM_beh.v"
 `else
-    `include "user_project/IPs/DFFRAM.v"
-	`include "user_project/IPs/DFFRAMBB.v"
-	`include "user_project/IPs/DMC_32x16HC.v"
+	`ifndef GL_UA
+		`include "user_project/IPs/DFFRAM_4K.v"
+		`include "user_project/IPs/DFFRAMBB.v"
+		`include "user_project/IPs/DMC_32x16HC.v"
+	`endif
 `endif
 
-`include "user_project/AHB_sys_0/AHBlite_sys_0.v"
+`ifdef GL_UA
+	`include "gl/user_project/gl/apb_sys_0.v"
+	`include "gl/user_project/gl/DFFRAM_4K.v"
+	`include "gl/user_project/gl/DMC_32x16HC.v"
+	`include "gl/user_project/gl/ibex_wrapper.v"
+	`include "gl/user_project/gl/user_project_wrapper.v"
+`else
+	`include "user_project/AHB_sys_0/AHBlite_sys_0.v"
 
-`include "user_project/AHB_sys_0/AHBlite_bus0.v"
-`include "user_project/AHB_sys_0/AHBlite_GPIO.v"
-`include "user_project/AHB_sys_0/AHBlite_db_reg.v"
+	`include "user_project/AHB_sys_0/AHBlite_bus0.v"
+	`include "user_project/AHB_sys_0/AHBlite_GPIO.v"
+	`include "user_project/AHB_sys_0/AHBlite_db_reg.v"
 
-`include "user_project/AHB_sys_0/APB_sys_0/APB_WDT32.v"
-`include "user_project/AHB_sys_0/APB_sys_0/APB_TIMER32.v"
-`include "user_project/AHB_sys_0/APB_sys_0/APB_PWM32.v"
-`include "user_project/AHB_sys_0/APB_sys_0/AHB_2_APB.v"
-`include "user_project/AHB_sys_0/APB_sys_0/APB_bus0.v"
-`include "user_project/AHB_sys_0/APB_sys_0/APB_sys_0.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/APB_WDT32.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/APB_TIMER32.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/APB_PWM32.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/AHB_2_APB.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/APB_bus0.v"
+	`include "user_project/AHB_sys_0/APB_sys_0/APB_sys_0.v"
 
-`include "user_project/IPs/TIMER32.v"
-`include "user_project/IPs/PWM32.v"
-`include "user_project/IPs/WDT32.v"
-`include "user_project/IPs/spi_master.v"
-`include "user_project/IPs/i2c_master.v"
-`include "user_project/IPs/GPIO.v"
-`include "user_project/IPs/APB_UART.v"
-`include "user_project/IPs/APB_SPI.v"
-`include "user_project/IPs/APB_I2C.v"
-`include "user_project/IPs/AHBSRAM.v"
-`include "user_project/acc/AHB_SPM.v"
+	`include "user_project/IPs/TIMER32.v"
+	`include "user_project/IPs/PWM32.v"
+	`include "user_project/IPs/WDT32.v"
+	`include "user_project/IPs/spi_master.v"
+	`include "user_project/IPs/i2c_master.v"
+	`include "user_project/IPs/GPIO.v"
+	`include "user_project/IPs/APB_UART.v"
+	`include "user_project/IPs/APB_SPI.v"
+	`include "user_project/IPs/APB_I2C.v"
+	`include "user_project/IPs/AHBSRAM.v"
+	`include "user_project/acc/AHB_SPM.v"
 
-`include "user_project/IPs/QSPI_XIP_CTRL.v"
-`include "user_project/IPs/RAM_3Kx32.v"
+	`include "user_project/IPs/QSPI_XIP_CTRL.v"
+	`include "user_project/IPs/RAM_3Kx32.v"
 
-`include "user_project/ibex/ibex_alu.v"
-`include "user_project/ibex/ibex_branch_predict.v"
-`include "user_project/ibex/ibex_compressed_decoder.v"
-`include "user_project/ibex/ibex_controller.v"
-`include "user_project/ibex/ibex_core.v"
-`include "user_project/ibex/ibex_counter.v"
-`include "user_project/ibex/ibex_cs_registers.v"
-`include "user_project/ibex/ibex_csr.v"
-`include "user_project/ibex/ibex_decoder.v"
-`include "user_project/ibex/ibex_dummy_instr.v"
-`include "user_project/ibex/ibex_ex_block.v"
-`include "user_project/ibex/ibex_fetch_fifo.v"
-`include "user_project/ibex/ibex_icache.v"
-`include "user_project/ibex/ibex_id_stage.v"
-`include "user_project/ibex/ibex_if_stage.v"
-`include "user_project/ibex/ibex_load_store_unit.v"
-`include "user_project/ibex/ibex_multdiv_fast.v"
-`include "user_project/ibex/ibex_multdiv_slow.v"
-`include "user_project/ibex/ibex_pmp.v"
-`include "user_project/ibex/ibex_prefetch_buffer.v"
-`include "user_project/ibex/ibex_register_file_latch.v"
-`include "user_project/ibex/ibex_wb_stage.v"
-`include "user_project/ibex/prim_clock_gating.v" 
-`include "user_project/ibex/ibex_register_file_ff.v"
-`include "user_project/ibex/ibex_wrapper.v"
+	`include "user_project/ibex/ibex_alu.v"
+	`include "user_project/ibex/ibex_branch_predict.v"
+	`include "user_project/ibex/ibex_compressed_decoder.v"
+	`include "user_project/ibex/ibex_controller.v"
+	`include "user_project/ibex/ibex_core.v"
+	`include "user_project/ibex/ibex_counter.v"
+	`include "user_project/ibex/ibex_cs_registers.v"
+	`include "user_project/ibex/ibex_csr.v"
+	`include "user_project/ibex/ibex_decoder.v"
+	`include "user_project/ibex/ibex_dummy_instr.v"
+	`include "user_project/ibex/ibex_ex_block.v"
+	`include "user_project/ibex/ibex_fetch_fifo.v"
+	`include "user_project/ibex/ibex_icache.v"
+	`include "user_project/ibex/ibex_id_stage.v"
+	`include "user_project/ibex/ibex_if_stage.v"
+	`include "user_project/ibex/ibex_load_store_unit.v"
+	`include "user_project/ibex/ibex_multdiv_fast.v"
+	`include "user_project/ibex/ibex_multdiv_slow.v"
+	`include "user_project/ibex/ibex_pmp.v"
+	`include "user_project/ibex/ibex_prefetch_buffer.v"
+	`include "user_project/ibex/ibex_register_file_latch.v"
+	`include "user_project/ibex/ibex_wb_stage.v"
+	`include "user_project/ibex/prim_clock_gating.v" 
+	`include "user_project/ibex/ibex_register_file_ff.v"
+	`include "user_project/ibex/ibex_wrapper.v"
 
-`include "user_project/soc_core.v"
+	`include "user_project/soc_core.v"
 
+`endif
 `endif
 
 module io_ports_tb;
